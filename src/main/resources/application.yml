@@ -1,0 +1,31 @@
+### Spring settings
+spring:
+  application:
+    name: opendelivery
+
+  # DATABASE
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: org.postgresql.Driver
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  # JACKSON
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+
+  # KEYCLOAK
+
+### Spring Doc (Swagger UI)
+springdoc:
+  api-docs:
+    version: openapi_3_0
+    path: /api-documentation
