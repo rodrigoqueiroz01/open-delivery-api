@@ -5,9 +5,9 @@ spring:
 
   # DATABASE
   datasource:
-    url:
-    username:
-    password:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/opendelivery}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   # JPA

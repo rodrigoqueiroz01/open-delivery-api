@@ -1,13 +1,12 @@
 package com.dev.opendelivery.order.model;
 
-import com.dev.opendelivery.order.model.vo.OrderConfirmVO;
 import com.dev.opendelivery.order.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -15,10 +14,11 @@ import java.util.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table
+@Table(name = "order_data", schema = "opendelivery")
 public class Order extends BaseEntity<UUID> {
 
     @ManyToOne
+    @JoinColumn(name = "source_app_id")
     @JsonProperty("idAppOrigem")
     private SourceApp sourceApp;
 
@@ -34,6 +34,7 @@ public class Order extends BaseEntity<UUID> {
     @Column(name = "date", nullable = false)
     private String date;
 
+    @JsonProperty("codigoExternoPedido")
     @Column(name = "order_external_code")
     private String orderExternalCode;
 
