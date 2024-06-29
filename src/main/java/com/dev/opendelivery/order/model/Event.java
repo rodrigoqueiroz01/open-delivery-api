@@ -16,11 +16,12 @@ import java.util.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "event", schema = "public")
+@Table(name = "event_data", schema = "opendelivery")
 public class Event extends BaseEntity<UUID> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ordering_application_id")
+    @ManyToOne
+    @JoinColumn(name = "source_app_id")
+    @JsonProperty("idAppOrigem")
     private SourceApp sourceApp;
 
     @JsonProperty("idPedido")
@@ -45,6 +46,7 @@ public class Event extends BaseEntity<UUID> {
 
     @Transient
     @JsonIgnore
+    @JsonProperty("oitoHorasAtras")
     private LocalDateTime eightHoursAgo;
 
 }

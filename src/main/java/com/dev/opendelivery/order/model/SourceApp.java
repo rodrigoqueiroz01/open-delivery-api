@@ -11,7 +11,7 @@ import static jakarta.persistence.GenerationType.AUTO;
 
 @Getter
 @Entity
-@Table(name = "source_app", schema = "public")
+@Table(name = "source_app_data", schema = "opendelivery")
 public class SourceApp extends BaseEntity<UUID> {
 
     @JsonProperty("descricao")

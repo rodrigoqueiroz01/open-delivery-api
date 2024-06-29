@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Log
 @SpringBootApplication
-public class OrderApplication {
+public class App {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OrderApplication.class, args);
+		SpringApplication.run(App.class, args);
 		links();
 	}
 
