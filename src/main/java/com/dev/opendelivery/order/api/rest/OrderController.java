@@ -15,8 +15,8 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 @Validated
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1/orders")
-public class OrderController implements IOrderController {
+@RequestMapping("/orders")
+public class OrderController {
 
     private final OrderService service;
 

@@ -1,19 +1,20 @@
 package com.dev.opendelivery.order.exception.handler;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static java.time.LocalDateTime.now;
 
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy HH:mm")
+    private final LocalDateTime timestamp = now();
 
     private String title;
     private Integer status;

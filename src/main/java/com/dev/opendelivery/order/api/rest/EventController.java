@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/events")
-public class EventController implements IEventController {
+public class EventController {
 
     private final OrderEventService service;
 

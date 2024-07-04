@@ -14,7 +14,7 @@ public class App {
 	}
 
 	private static void links() {
-		log.info("Swagger UI: http://localhost:8080/swagger-ui.html");
+		log.info("Swagger UI: http://localhost:8080/swagger-ui/index.html");
 		log.info("Application: http://localhost:8080/order/OrderApplication");
 	}
 

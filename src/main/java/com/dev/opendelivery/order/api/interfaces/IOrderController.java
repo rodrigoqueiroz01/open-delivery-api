@@ -11,13 +11,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 import java.util.UUID;
 
 @Validated
 @RestController
-@Tag(name = "Orders")
-@RequestMapping("/v1/orders")
+@RequestMapping("orders")
+@Tag(name = "Pedidos", description = "Requisições da API de Pedidos")
 @SecurityRequirement(name = "bearerAuth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public interface IOrderController {
