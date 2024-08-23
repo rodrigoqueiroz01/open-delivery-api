@@ -30,7 +30,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleValidationException(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<ApiError.Field> fields = getFieldsWithError(ex);
-
         ApiError apiError = ApiError.builder()
                 .status(status.value())
                 .title(INVALIDATION_MESSAGE)
@@ -39,14 +38,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         headers.setContentType(APPLICATION_PROBLEM_JSON);
-
         return super.handleExceptionInternal(ex, apiError, headers, status, request);
     }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         var status = INTERNAL_SERVER_ERROR;
-
         var apiError = ApiError
                 .builder()
                 .title(GENERIC_ERROR_MESSAGE)
@@ -56,14 +53,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         var headers = new HttpHeaders();
         headers.setContentType(APPLICATION_PROBLEM_JSON);
-
         return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
         var status = NOT_FOUND;
-
         var apiError = ApiError.builder()
                 .title(ex.getMessage())
                 .status(status.value())
@@ -71,7 +66,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         var headers = new HttpHeaders();
         headers.setContentType(APPLICATION_PROBLEM_JSON);
-
         return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 

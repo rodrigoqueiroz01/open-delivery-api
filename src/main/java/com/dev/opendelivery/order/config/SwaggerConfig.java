@@ -14,6 +14,4 @@ import org.springframework.context.annotation.Configuration;
                 url = "https://choosealicense.com/licenses/mit/"
         )
 ))
-public class SwaggerConfig {
-
-}
+public class SwaggerConfig {}

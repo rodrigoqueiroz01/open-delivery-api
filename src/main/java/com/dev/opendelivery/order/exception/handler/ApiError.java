@@ -6,14 +6,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static java.time.LocalDateTime.now;
 
 @Getter
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(NON_NULL)
 public class ApiError {
 
-    @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy HH:mm")
+    @JsonFormat(shape = STRING, pattern = "dd/MM/yyyy HH:mm")
     private final LocalDateTime timestamp = now();
 
     private String title;
