@@ -42,21 +42,7 @@ public class OrderService {
 
     public void confirm(UUID orderId, OrderConfirmVO confirm) {
         var order = repository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("pedido.nao.encontrado"));
-
-        var orderConfirm = repository.confirmOrderByExternalCode(confirm.getOrderExternalCode());
-        orderConfirm.ifPresentOrElse(
-                orderExisting -> {
-                    confirm.setConfirmed(true);
-                    confirm.setConfirmedAt(LocalDateTime.now());
-                    confirm.setOrderExternalCode(UUID.randomUUID().toString());
-
-                    eventService.orderConfirm(orderId, orderExisting.getSourceApp(), confirm);
-                    repository.save(orderExisting);
-                }, () -> {
-                    throw new EntityNotFoundException("pedido.nao.encontrado");
-                }
-        );
-
+        orderConfirm(orderId, confirm);
         var orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
         for (Order o : orders) {
             eventService.orderConfirm(orderId, o.getSourceApp(), confirm);
@@ -66,7 +52,6 @@ public class OrderService {
     public void readyForPickup(UUID orderId) {
         var order = repository.findById(orderId).orElseThrow(() ->
                 new EntityNotFoundException("pedido.nao.encontrado"));
-
         List<Order> orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
         for (Order o : orders) {
             eventService.orderReadyForPickup(orderId, o.getSourceApp());
@@ -76,14 +61,27 @@ public class OrderService {
     public void dispatch(UUID orderId) {
         var order = repository.findById(orderId).orElseThrow(() ->
                 new EntityNotFoundException("pedido.nao.encontrado"));
-
         List<Order> orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
         orders.stream().map(Order::getSourceApp).forEach(sourceApp ->
                 orders.removeIf(o -> o.getSourceApp().equals(sourceApp)));
-
         for (Order o : orders) {
             eventService.orderDispatch(orderId, o.getSourceApp());
         }
+    }
+
+    private void orderConfirm(UUID orderId, OrderConfirmVO confirm) {
+        var confirmed = repository.confirmOrderByExternalCode(confirm.getOrderExternalCode());
+        confirmed.ifPresentOrElse(
+                orderExisting -> {
+                    confirm.setConfirmed(true);
+                    confirm.setConfirmedAt(LocalDateTime.now());
+                    confirm.setOrderExternalCode(UUID.randomUUID().toString());
+                    eventService.orderConfirm(orderId, orderExisting.getSourceApp(), confirm);
+                    repository.save(orderExisting);
+                }, () -> {
+                    throw new EntityNotFoundException("pedido.nao.encontrado");
+                }
+        );
     }
 
 }

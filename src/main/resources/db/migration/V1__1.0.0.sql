@@ -24,6 +24,5 @@ CREATE TABLE event_data (
     date                    DATE         NOT NULL,
     accepted_at             DATE         NOT NULL,
     event_type              VARCHAR(255) NOT NULL,
-
     CONSTRAINT fk_source_app FOREIGN KEY (source_app_id) REFERENCES source_app_data (id)
 );
