@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.dev.opendelivery.order.model.enums.EventType.*;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Objects.*;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class OrderEventService {
                 .sourceApp(sourceAppId)
                 .build();
 
-        CompletableFuture.completedFuture(save(event));
+        completedFuture(save(event));
     }
 
     @Async
@@ -39,7 +40,6 @@ public class OrderEventService {
                 .orderId(orderId)
                 .sourceApp(sourceApp)
                 .build();
-
         save(event);
     }
 
@@ -50,7 +50,6 @@ public class OrderEventService {
                 .orderId(orderId)
                 .sourceApp(sourceApp)
                 .build();
-
         save(event);
     }
 
@@ -61,7 +60,6 @@ public class OrderEventService {
                 .orderId(orderId)
                 .sourceApp(sourceAppId)
                 .build();
-
         save(event);
     }
 
@@ -72,25 +70,17 @@ public class OrderEventService {
                 .orderId(orderId)
                 .sourceApp(sourceApp)
                 .build();
-
         save(event);
     }
 
     public Event save(Event event) {
-        if (isNull(event.getId())) {
-            event.setId(UUID.randomUUID());
-        }
-
-        if (isNull(event.getCreatedAt())) {
-            event.setCreatedAt(LocalDateTime.now());
-        }
-
+        if (isNull(event.getId())) event.setId(UUID.randomUUID());
+        if (isNull(event.getCreatedAt())) event.setCreatedAt(LocalDateTime.now());
         return repository.save(event);
     }
 
     public boolean accept(UUID eventId, UUID sourceAppId) {
         var event = repository.findByIdAndSourceAppId(eventId, sourceAppId);
-
         if (nonNull(event)) {
             event.setAcceptedAt(new Date());
             repository.save(event);
@@ -106,10 +96,10 @@ public class OrderEventService {
         List<Event> events = new ArrayList<>();
 
         if (nonNull(eventsData)) {
-            for (Event event : eventsData) {
+            eventsData.forEach(event -> {
                 event.getDate();
                 events.add(event);
-            }
+            });
         }
 
         return events;

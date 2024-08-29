@@ -6,11 +6,8 @@ import com.dev.opendelivery.order.model.vo.*;
 import com.dev.opendelivery.order.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static java.util.Objects.isNull;
 
 @Service
 @AllArgsConstructor
@@ -28,10 +25,7 @@ public class OrderService {
 
         var saveOrder = repository.save(order);
         var orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
-
-        for (Order o : orders) {
-            eventService.orderCreate(saveOrder.getId(), o.getSourceApp());
-        }
+        orders.forEach(order1 -> eventService.orderCreate(saveOrder.getId(), order1.getSourceApp()));
 
         return findById(saveOrder.getId());
     }
@@ -41,32 +35,23 @@ public class OrderService {
     }
 
     public void confirm(UUID orderId, OrderConfirmVO confirm) {
-        var order = repository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("pedido.nao.encontrado"));
+        var orderConfirm = repository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("pedido.nao.encontrado"));
         orderConfirm(orderId, confirm);
-        var orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
-        for (Order o : orders) {
-            eventService.orderConfirm(orderId, o.getSourceApp(), confirm);
-        }
+        var orders = repository.findAllSourceAppIdByMerchantId(orderConfirm.getMerchantId());
+        orders.forEach(order -> eventService.orderConfirm(orderId, order.getSourceApp(), confirm));
     }
 
     public void readyForPickup(UUID orderId) {
-        var order = repository.findById(orderId).orElseThrow(() ->
-                new EntityNotFoundException("pedido.nao.encontrado"));
-        List<Order> orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
-        for (Order o : orders) {
-            eventService.orderReadyForPickup(orderId, o.getSourceApp());
-        }
+        var orderBy = repository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("pedido.nao.encontrado"));
+        List<Order> orders = repository.findAllSourceAppIdByMerchantId(orderBy.getMerchantId());
+        orders.forEach(order -> eventService.orderReadyForPickup(orderId, order.getSourceApp()));
     }
 
     public void dispatch(UUID orderId) {
-        var order = repository.findById(orderId).orElseThrow(() ->
-                new EntityNotFoundException("pedido.nao.encontrado"));
-        List<Order> orders = repository.findAllSourceAppIdByMerchantId(order.getMerchantId());
-        orders.stream().map(Order::getSourceApp).forEach(sourceApp ->
-                orders.removeIf(o -> o.getSourceApp().equals(sourceApp)));
-        for (Order o : orders) {
-            eventService.orderDispatch(orderId, o.getSourceApp());
-        }
+        var orderBy = repository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("pedido.nao.encontrado"));
+        List<Order> orders = repository.findAllSourceAppIdByMerchantId(orderBy.getMerchantId());
+        orders.stream().map(Order::getSourceApp).forEach(sourceApp -> orders.removeIf(o -> o.getSourceApp().equals(sourceApp)));
+        orders.forEach(order -> eventService.orderDispatch(orderId, order.getSourceApp()));
     }
 
     private void orderConfirm(UUID orderId, OrderConfirmVO confirm) {
