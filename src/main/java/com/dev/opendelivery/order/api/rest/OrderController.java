@@ -1,6 +1,5 @@
 package com.dev.opendelivery.order.api.rest;
 
-import com.dev.opendelivery.order.api.interfaces.IOrderController;
 import com.dev.opendelivery.order.model.*;
 import com.dev.opendelivery.order.model.vo.OrderConfirmVO;
 import com.dev.opendelivery.order.service.OrderService;
@@ -15,13 +14,13 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 @Validated
 @RestController
 @AllArgsConstructor
-@RequestMapping("/orders")
+@RequestMapping("/pedidos")
 public class OrderController {
 
     private final OrderService service;
 
-    @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrderDetails(@PathVariable UUID orderId) throws Exception {
+    @GetMapping("/{id}")
+    public ResponseEntity<Order> getOrderDetails(@PathVariable("id") UUID orderId) throws Exception {
         return ResponseEntity.ok(service.findById(orderId));
     }
 
@@ -30,38 +29,20 @@ public class OrderController {
         return ResponseEntity.ok(service.save(order));
     }
 
-    @PutMapping("/{orderId}/confirm")
-    public ResponseEntity<OrderConfirmVO> confirm(@PathVariable UUID orderId, @RequestBody(required = false) OrderConfirmVO orderConfirm) {
+    @PutMapping("/{id}/confirmacao")
+    public ResponseEntity<OrderConfirmVO> confirm(@PathVariable("id") UUID orderId, @RequestBody(required = false) OrderConfirmVO orderConfirm) {
         service.confirm(orderId, orderConfirm);
         return ResponseEntity.status(ACCEPTED).build();
     }
 
-    @PostMapping("/{orderId}/confirm")
-    public ResponseEntity<OrderConfirmVO> confirm2(@PathVariable UUID orderId, @RequestBody(required = false) OrderConfirmVO orderConfirm) {
-        service.confirm(orderId, orderConfirm);
-        return ResponseEntity.status(ACCEPTED).build();
-    }
-
-    @PutMapping("/{orderId}/readyForPickup")
-    public ResponseEntity<Event> readyForPickup(@PathVariable UUID orderId) {
+    @PutMapping("/{id}/pronto-para-retirada")
+    public ResponseEntity<Event> readyForPickup(@PathVariable("id") UUID orderId) {
         service.readyForPickup(orderId);
         return ResponseEntity.status(ACCEPTED).build();
     }
 
-    @PostMapping("/{orderId}/readyForPickup")
-    public ResponseEntity<Event> readyForPickup2(@PathVariable UUID orderId) {
-        service.readyForPickup(orderId);
-        return ResponseEntity.status(ACCEPTED).build();
-    }
-
-    @PutMapping("/{orderId}/dispatch")
-    public ResponseEntity<Event> dispatch(@PathVariable UUID orderId) {
-        service.dispatch(orderId);
-        return ResponseEntity.status(ACCEPTED).build();
-    }
-
-    @PostMapping("/{orderId}/dispatch")
-    public ResponseEntity<Event> dispatch2(@PathVariable UUID orderId) {
+    @PutMapping("/{id}/despachar")
+    public ResponseEntity<Event> dispatch(@PathVariable("id") UUID orderId) {
         service.dispatch(orderId);
         return ResponseEntity.status(ACCEPTED).build();
     }

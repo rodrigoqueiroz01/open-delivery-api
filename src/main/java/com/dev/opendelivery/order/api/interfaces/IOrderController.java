@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Validated
 @RestController
-@RequestMapping("orders")
+@RequestMapping("pedidos")
 @Tag(name = "Pedidos", description = "Requisições da API de Pedidos")
 @SecurityRequirement(name = "bearerAuth")
 @CrossOrigin(origins = "*", maxAge = 3600)
